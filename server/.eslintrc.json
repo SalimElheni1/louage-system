@@ -1,0 +1,25 @@
+{
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended" // Integrates Prettier with ESLint
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": "warn",
+    "eqeqeq": "error", // Requires === instead of ==
+    "curly": "error", // Requires curly braces
+    "default-case": "error", // Requires default case in switch
+    "no-implicit-coercion": "error", // Disables tricks like !!value
+    "no-extra-semi": "error", // Disables unnecessary semicolons
+    "no-unused-vars": "error",
+    "no-undef": "error",
+    "prettier/prettier": "error"
+  }
+}

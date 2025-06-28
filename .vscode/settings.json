@@ -1,0 +1,19 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.workingDirectories": [
+    { "mode": "auto" },
+    { "directory": "./server", "changeProcessCWD": true },
+    { "directory": "./client", "changeProcessCWD": true }
+  ],
+  "eslint.validate": ["javascript", "javascriptreact"],
+  "prettier.enable": true,
+  "files.autoSave": "off",
+  "prettier.configPath": "./server/.prettierrc",
+  "cSpell.words": ["Louage"],
+  "notebook.defaultFormatter": "esbenp.prettier-vscode",
+  "files.eol": "\n"
+}
