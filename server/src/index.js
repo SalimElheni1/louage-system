@@ -8,6 +8,7 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import tripRoutes from './routes/tripRoutes.js';
 import stationRoutes from './routes/stationRoutes.js';
+import errorHandler from './middleware/errorHandler.js';
 
 // Load environment variables
 dotenv.config();
@@ -16,8 +17,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// CORS configuration for frontend integration
+const allowedOrigins = [
+  'http://localhost:3000', // React dev server
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -37,6 +47,9 @@ app.use('/api/stations', stationRoutes);
 app.get('/', (req, res) => {
   res.send('Digital Louage System API is running!');
 });
+
+// Global error handler (should be after all routes)
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {

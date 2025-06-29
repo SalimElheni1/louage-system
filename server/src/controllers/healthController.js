@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-export const getHealthStatus = (req, res) => {
+export const getHealthStatus = (req, res, next) => {
   try {
     // Get database connection status
     const dbStatus = mongoose.connection.readyState;
@@ -19,16 +19,17 @@ export const getHealthStatus = (req, res) => {
     };
     
     res.status(200).json({
-      status: 'UP',
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development',
-      database: statusMap[dbStatus] || 'UNKNOWN',
-      uptime: process.uptime()
+      success: true,
+      data: {
+        status: 'UP',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development',
+        database: statusMap[dbStatus] || 'UNKNOWN',
+        uptime: process.uptime()
+      },
+      message: 'Health check successful'
     });
   } catch (error) {
-    res.status(500).json({ 
-      status: 'DOWN',
-      error: error.message 
-    });
+    next(error);
   }
 };
