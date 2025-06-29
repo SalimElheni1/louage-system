@@ -7,7 +7,7 @@ import {
   deleteStation
 } from '../controllers/stationController.js';
 import auth from '../middleware/auth.js';
-import authorizeRoles from '../middleware/authorize.js';
+import {authorizeRoles} from '../middleware/authorize.js';
 
 const router = express.Router();
 
