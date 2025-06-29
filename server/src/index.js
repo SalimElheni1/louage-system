@@ -5,6 +5,7 @@ import connectDB from './config/db.js';
 import healthRoutes from './routes/healthRoutes.js';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,7 @@ connectDB();
 app.use('/api/health', healthRoutes);
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 // Basic route
 app.get('/', (req, res) => {

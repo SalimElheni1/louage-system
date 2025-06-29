@@ -5,7 +5,7 @@ graph TD
     A --> D[React Bootstrap]
     A --> E[PWA Setup]
 
-    F[Backend] --> G[Node.js V18]
+    F[Backend] --> G[Node.js V22]
     F --> H[Express 5.x]
     F --> I[Mongoose 8.x]
 
