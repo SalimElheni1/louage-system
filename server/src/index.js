@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import healthRoutes from './routes/healthRoutes.js';
+import cookieParser from 'cookie-parser';
+import authRoutes from './routes/authRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -14,6 +16,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Connect to DB
 connectDB();
@@ -21,6 +24,8 @@ connectDB();
 // Mount the health check routes at /api/health. 
 // This allows external services or monitoring tools to check if the API is running and healthy.
 app.use('/api/health', healthRoutes);
+
+app.use('/api/auth', authRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
