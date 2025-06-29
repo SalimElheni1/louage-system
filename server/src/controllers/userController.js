@@ -36,6 +36,9 @@ const getUserById = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const allowedFields = ['firstName', 'lastName', 'username', 'email'];
+    if (req.user.role === 'admin' || req.body.role === 'admin') {
+      allowedFields.push('station');
+    }
     const updates = {};
     for (const field of allowedFields) {
       if (req.body[field] !== undefined) {

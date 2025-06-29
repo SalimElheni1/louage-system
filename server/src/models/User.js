@@ -34,6 +34,11 @@ const UserSchema = new mongoose.Schema({
         enum: ['driver', 'passenger', 'admin', 'superadmin'],
         default: 'passenger'
     },
+    station: {
+        type: String,
+        required: function() { return this.role === 'admin'; },
+        trim: true
+    },
     createdAt: {
         type: Date,
         default: Date.now

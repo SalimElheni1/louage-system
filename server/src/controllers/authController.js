@@ -8,7 +8,8 @@ const generateToken = (user) => {
     {
       id: user._id,
       username: user.username,
-      role: user.role
+      role: user.role,
+      station: user.station || null
     },
     process.env.JWT_SECRET,
     { expiresIn: '7d' } // Token expires in 7 days
