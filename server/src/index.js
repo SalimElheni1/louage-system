@@ -20,6 +20,8 @@ const PORT = process.env.PORT || 5000;
 // CORS configuration for frontend integration
 const allowedOrigins = [
   'http://localhost:3000', // React dev server
+  'http://localhost:5173', // Vite dev server
+  'http://127.0.0.1:5173', // Vite dev server (IP)
 ];
 
 app.use(cors({

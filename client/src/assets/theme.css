@@ -1,0 +1,132 @@
+:root {
+    --primary-color: hsl(0, 75%, 55%);
+    --secondary-color: hsl(210, 40%, 96%);
+    --accent-color: hsl(45, 85%, 60%);
+    --success-color: hsl(142, 71%, 45%);
+    --warning-color: hsl(38, 92%, 50%);
+    --danger-color: hsl(0, 84%, 60%);
+    --dark-color: hsl(215, 25%, 15%);
+    --light-color: hsl(0, 0%, 100%);
+}
+
+body {
+    background: linear-gradient(135deg, var(--light-color) 0%, var(--secondary-color) 100%);
+    color: var(--dark-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-brand {
+    color: var(--primary-color) !important;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: hsl(0, 75%, 50%);
+    border-color: hsl(0, 75%, 50%);
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    padding: 100px 0;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 8px hsla(215, 25%, 15%, 0.08);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 16px hsla(215, 25%, 15%, 0.12);
+    transform: translateY(-2px);
+}
+
+footer {
+    background: var(--dark-color);
+    color: var(--light-color);
+    margin-top: 80px;
+    transition: background 0.3s;
+}
+
+.feature-icon {
+    color: var(--primary-color);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.section-bg {
+    background: var(--light-color);
+    transition: background 0.3s;
+}
+
+[data-bs-theme='dark'] {
+    --primary-color: hsl(0, 75%, 65%);
+    --secondary-color: hsl(215, 25%, 20%);
+    --accent-color: hsl(45, 85%, 40%);
+    --success-color: hsl(142, 71%, 35%);
+    --warning-color: hsl(38, 92%, 60%);
+    --danger-color: hsl(0, 84%, 70%);
+    --dark-color: hsl(0, 0%, 100%);
+    --light-color: hsl(215, 25%, 15%);
+}
+
+[data-bs-theme='dark'] body {
+    background: linear-gradient(135deg, var(--light-color) 0%, var(--secondary-color) 100%);
+    color: var(--dark-color);
+}
+
+[data-bs-theme='dark'] .navbar-brand {
+    color: var(--primary-color) !important;
+}
+
+[data-bs-theme='dark'] .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+[data-bs-theme='dark'] .btn-primary:hover {
+    background-color: hsl(0, 75%, 60%);
+    border-color: hsl(0, 75%, 60%);
+}
+
+[data-bs-theme='dark'] .text-primary {
+    color: var(--primary-color) !important;
+}
+
+[data-bs-theme='dark'] .hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+}
+
+[data-bs-theme='dark'] .card {
+    background: var(--secondary-color);
+    color: var(--dark-color);
+    box-shadow: 0 2px 8px hsla(0, 0%, 0%, 0.15);
+}
+
+[data-bs-theme='dark'] .card:hover {
+    box-shadow: 0 4px 16px hsla(0, 0%, 0%, 0.25);
+}
+
+[data-bs-theme='dark'] footer {
+    background: var(--light-color);
+    color: var(--primary-color);
+}
+
+[data-bs-theme='dark'] .feature-icon {
+    color: var(--primary-color);
+}
+
+[data-bs-theme='dark'] .section-bg {
+    background: var(--secondary-color);
+}

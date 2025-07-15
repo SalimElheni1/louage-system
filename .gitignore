@@ -5,3 +5,9 @@ node_modules/
 # React
 build/
 .DS_Store
+
+docs/louage-html-template
+docs/conv.txt
+docs/BACKEND_API_REFERENCE.md
+docs/React_Redux_Guide.markdown
+docs/React_Redux_Guide.markdown:Zone.Identifier
