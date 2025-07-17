@@ -13,9 +13,15 @@ router.post(
     check('firstName', 'First name is required').not().isEmpty(),
     check('lastName', 'Last name is required').not().isEmpty(),
     check('username', 'Username is required').not().isEmpty(),
+    check('phone', 'Phone number is required').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
     check('password', 'Password must be 6+ characters').isLength({ min: 6 }),
-    check('role', 'Role is required').not().isEmpty()
+    check('role', 'Role is required and must be either passenger or driver').isIn(['passenger', 'driver']),
+    // Conditionally validate driver-specific fields
+    check('vehicleType').if(check('role').equals('driver')).not().isEmpty().withMessage('Vehicle type is required for drivers'),
+    check('licensePlate').if(check('role').equals('driver')).not().isEmpty().withMessage('License plate is required for drivers'),
+    check('licenseNumber').if(check('role').equals('driver')).not().isEmpty().withMessage('Driver\'s license number is required for drivers'),
+    check('experience').if(check('role').equals('driver')).not().isEmpty().withMessage('Years of experience is required for drivers')
   ],
   register
 );

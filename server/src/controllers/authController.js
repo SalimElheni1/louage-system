@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { compare } from 'bcryptjs';
+import { validationResult } from 'express-validator';
 
 // Helper function to generate JWT token
 const generateToken = (user) => {
@@ -20,7 +21,16 @@ const generateToken = (user) => {
 // @route   POST /api/auth/register
 // @access  Public
 const register = async (req, res, next) => {
-  const { firstName, lastName, username, email, password, role } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+  }
+
+  const {
+    firstName, lastName, username, email, password, role, phone,
+    // Driver specific fields
+    vehicleType, licensePlate, licenseNumber, experience
+  } = req.body;
 
   try {
     // Check if user already exists
@@ -30,14 +40,28 @@ const register = async (req, res, next) => {
     }
 
     // Create new user
-    const user = new User({
+    const userData = {
       firstName,
       lastName,
       username,
       email,
       password,
-      role
-    });
+      role,
+      phone
+    };
+
+    if (role === 'driver') {
+      // It's recommended to store driver-specific info in a sub-document.
+      userData.driverDetails = {
+        vehicleType,
+        licensePlate,
+        licenseNumber,
+        experience
+      };
+    }
+
+    // Note: Ensure your User model schema is updated to handle 'phone' and the 'driverDetails' object.
+    const user = new User(userData);
 
     // Save to database
     await user.save();

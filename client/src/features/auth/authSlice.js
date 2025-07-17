@@ -1,19 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { API_BASE_URL } from '../../constants';
+import * as api from '../../services/api';
 
 export const login = createAsyncThunk(
     'auth/login',
-    async ({ email, password }, { rejectWithValue }) => {
+    async (credentials, { rejectWithValue }) => {
         try {
-            const response = await axios.post(
-                `${API_BASE_URL}/auth/login`,
-                { email, password },
-                { withCredentials: true }
-            );
+            const response = await api.loginUser(credentials);
             return response.data.data;
         } catch (error) {
-            return rejectWithValue(error.response.data.message);
+            const message = error.response?.data?.message || error.message || 'Login failed';
+            return rejectWithValue(message);
         }
     }
 );
@@ -22,11 +18,9 @@ export const registerUser = createAsyncThunk(
     'auth/register',
     async (userData, { rejectWithValue }) => {
         try {
-            const response = await axios.post(
-                `${API_BASE_URL}/auth/register`,
-                userData,
-                { withCredentials: true }
-            );
+            const response = await api.registerUser(userData);
+            // The register endpoint returns a success message, not user data, so we don't return anything here.
+            // The component will handle the success state.
             return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Registration failed');
