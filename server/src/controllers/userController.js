@@ -90,19 +90,10 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-// @desc    Logout user (clear cookie)
-// @route   POST /api/auth/logout
-// @access  Private
-const logout = (req, res) => {
-  res.clearCookie('token');
-  res.json({ success: true, data: null, message: 'Logged out successfully' });
-};
-
 export {
   getAllUsers,
   getUserById,
   updateProfile,
   changePassword,
-  deleteUser,
-  logout
+  deleteUser
 };

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const router = Router();
 import { check } from 'express-validator';
-import { register, login, getProfile } from '../controllers/authController.js';
+import { register, login, getProfile, logout } from '../controllers/authController.js';
 import auth from '../middleware/auth.js';
 
 // @route   POST /api/auth/register
@@ -42,5 +42,10 @@ router.post(
 // @desc    Get user profile
 // @access  Private
 router.get('/profile', auth, getProfile);
+
+// @route   POST /api/auth/logout
+// @desc    Logout user
+// @access  Private
+router.post('/logout', auth, logout);
 
 export default router;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import FeaturesSection from './FeaturesSection';
-import QuickLinksSection from './QuickLinksSection';
+import FeaturesSection from '../components/home/FeaturesSection';
+import QuickLinksSection from '../components/home/QuickLinksSection';
 
 function Home() {
     const { t } = useTranslation();

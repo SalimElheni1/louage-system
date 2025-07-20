@@ -8,6 +8,10 @@ const TripSchema = new mongoose.Schema({
     },
     departureStation: { type: String, required: true },
     arrivalStation: { type: String, required: true },
+    departureTime: {
+        type: Date,
+        required: true
+    },
     availableSeats: { type: Number, required: true },
     price: { type: Number, required: true },
     status: {

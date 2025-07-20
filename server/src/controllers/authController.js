@@ -23,7 +23,7 @@ const generateToken = (user) => {
 const register = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+    return res.status(400).json({ success: false, message: errors.array()[0].msg, errors: errors.array() });
   }
 
   const {
@@ -77,19 +77,23 @@ const register = async (req, res, next) => {
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
+    const responseData = {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      email: user.email,
+      role: user.role
+    };
+
+    if (user.role === 'driver') {
+      responseData.driverDetails = user.driverDetails;
+    }
+    if (user.role === 'admin' || user.role === 'superadmin') {
+      responseData.station = user.station;
+    }
     // Return user info (excluding password and token)
-    res.status(201).json({
-      success: true,
-      data: {
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      },
-      message: 'User registered successfully'
-    });
+    res.status(201).json({ success: true, data: responseData, message: 'User registered successfully' });
   } catch (error) {
     next(error);
   }
@@ -99,6 +103,11 @@ const register = async (req, res, next) => {
 // @route   POST /api/auth/login
 // @access  Public
 const login = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: errors.array()[0].msg, errors: errors.array() });
+  }
+
   const { email, password } = req.body;
 
   try {
@@ -125,19 +134,23 @@ const login = async (req, res, next) => {
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
+    const responseData = {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      email: user.email,
+      role: user.role
+    };
+
+    if (user.role === 'driver') {
+      responseData.driverDetails = user.driverDetails;
+    }
+    if (user.role === 'admin' || user.role === 'superadmin') {
+      responseData.station = user.station;
+    }
     // Return user info (excluding password and token)
-    res.json({
-      success: true,
-      data: {
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      },
-      message: 'Login successful'
-    });
+    res.json({ success: true, data: responseData, message: 'Login successful' });
   } catch (error) {
     next(error);
   }
@@ -146,7 +159,7 @@ const login = async (req, res, next) => {
 // @desc    Get logged-in user profile
 // @route   GET /api/auth/profile
 // @access  Private
-const getProfile = async (req, res) => {
+const getProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) {
@@ -154,13 +167,21 @@ const getProfile = async (req, res) => {
     }
     res.json({ success: true, data: user });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, data: null, message: 'Server error' });
+    next(error);
   }
+};
+
+// @desc    Logout user (clear cookie)
+// @route   POST /api/auth/logout
+// @access  Private
+const logout = (req, res) => {
+  res.clearCookie('token');
+  res.json({ success: true, data: null, message: 'Logged out successfully' });
 };
 
 export {
   register,
   login,
-  getProfile
+  getProfile,
+  logout
 };

@@ -1,5 +1,6 @@
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
+import { validationResult } from 'express-validator';
 
 const stationsWithoutAdmin = ['Kebili']; // Example, can be expanded later
 
@@ -7,8 +8,12 @@ const stationsWithoutAdmin = ['Kebili']; // Example, can be expanded later
 // @route   POST /api/trips
 // @access  Driver/Admin/Superadmin
 const createTrip = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+  }
   try {
-    const { departureStation, arrivalStation, availableSeats, price, driver } = req.body;
+    const { departureStation, arrivalStation, departureTime, availableSeats, price, driver } = req.body;
     let assignedDriver = driver || req.user.id;
 
     if (req.user.role === 'driver') {
@@ -38,6 +43,7 @@ const createTrip = async (req, res, next) => {
       driver: assignedDriver,
       departureStation,
       arrivalStation,
+      departureTime,
       availableSeats,
       price,
       createdBy: req.user.id
@@ -54,8 +60,25 @@ const createTrip = async (req, res, next) => {
 // @access  Public
 const getAllTrips = async (req, res, next) => {
   try {
-    const trips = await Trip.find().populate('createdBy', 'driver', '-password');
+    const trips = await Trip.find()
+      .populate('driver', 'firstName lastName username')
+      .populate('createdBy', 'username');
     res.json({ success: true, data: trips, message: 'Trips fetched successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get trips for the logged-in user
+// @route   GET /api/trips/my-trips
+// @access  Private (Driver/Admin)
+const getMyTrips = async (req, res, next) => {
+  try {
+    // Find trips where the driver or creator is the currently logged-in user
+    const trips = await Trip.find({ createdBy: req.user.id })
+      .populate('driver', 'firstName lastName')
+      .sort({ departureTime: -1 }); // Sort by most recent departure time
+    res.json({ success: true, data: trips, message: 'Your trips fetched successfully' });
   } catch (error) {
     next(error);
   }
@@ -153,5 +176,6 @@ export {
   getAllTrips,
   getTripById,
   updateTrip,
-  deleteTrip
+  deleteTrip,
+  getMyTrips
 };

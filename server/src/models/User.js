@@ -29,6 +29,11 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
+    phone: {
+        type: String,
+        required: true,
+        trim: true
+    },
     role: {
         type: String,
         enum: ['driver', 'passenger', 'admin', 'superadmin'],
@@ -38,6 +43,24 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: function() { return this.role === 'admin'; },
         trim: true
+    },
+    driverDetails: {
+        vehicleType: {
+            type: String,
+            required: function() { return this.role === 'driver'; }
+        },
+        licensePlate: {
+            type: String,
+            required: function() { return this.role === 'driver'; }
+        },
+        licenseNumber: {
+            type: String,
+            required: function() { return this.role === 'driver'; }
+        },
+        experience: {
+            type: String,
+            required: function() { return this.role === 'driver'; }
+        }
     },
     createdAt: {
         type: Date,

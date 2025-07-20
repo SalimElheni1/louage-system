@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,7 +10,6 @@ function Register() {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [role, setRole] = useState('');
     const auth = useSelector((state) => state.auth);
     const {
         register,
@@ -20,20 +19,23 @@ function Register() {
     } = useForm();
 
     useEffect(() => {
-        if (auth.registrationSuccess) {
-            toast.success(t('registration_success'), { autoClose: 2000 });
-            setTimeout(() => {
-                dispatch(clearRegistration());
-                navigate('/login');
-            }, 2000);
+        if (auth.isAuthenticated && auth.user) {
+            toast.success(`${t('welcome_new_user')}, ${auth.user.firstName}!`);
+            // Clear registration-specific state before navigating
+            dispatch(clearRegistration());
+            navigate('/');
         }
-    }, [auth.registrationSuccess, dispatch, navigate, t]);
+        // Clear any previous registration errors when the component mounts
+        return () => {
+            dispatch(clearRegistration());
+        };
+    }, [auth.isAuthenticated, auth.user, dispatch, navigate, t]);
 
     const onSubmit = (data) => {
         dispatch(registerUser(data));
     };
 
-    const selectedRole = watch('role', role);
+    const selectedRole = watch('role');
 
     return (
         <>
@@ -61,9 +63,6 @@ function Register() {
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         {auth.error && <div className="alert alert-danger">{auth.error}</div>}
-                        {auth.registrationSuccess && (
-                            <div className="alert alert-success">{t('registration_success')}</div>
-                        )}
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="firstName" className="form-label">
@@ -177,10 +176,7 @@ function Register() {
                             <select
                                 className={`form-select ${errors.role ? 'is-invalid' : ''}`}
                                 id="role"
-                                {...register('role', {
-                                    required: t('role_required'),
-                                    onChange: (e) => setRole(e.target.value)
-                                })}
+                                {...register('role', { required: t('role_required') })}
                             >
                                 <option value="">{t('select_account_type')}</option>
                                 <option value="passenger">{t('passenger')}</option>

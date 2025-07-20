@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../features/auth/authSlice';
+import { login, clearRegistration } from '../features/auth/authSlice';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from '../toast';
@@ -20,11 +20,15 @@ function Login() {
     useEffect(() => {
         if (auth.isAuthenticated && auth.user) {
             toast.success(`${t('welcome_back')}, ${auth.user.firstName || ''}!`, {
-                autoClose: 2000
+                autoClose: 2000,
+                onClose: () => navigate('/') // Navigate after toast closes
             });
-            setTimeout(() => navigate('/'), 2000);
         }
-    }, [auth.isAuthenticated, auth.user, t, navigate]);
+        // Cleanup function to clear errors when the component unmounts
+        return () => {
+            dispatch(clearRegistration());
+        };
+    }, [auth.isAuthenticated, auth.user, t, navigate, dispatch]);
 
     const onSubmit = (data) => {
         dispatch(login(data));

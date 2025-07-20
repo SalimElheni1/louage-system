@@ -5,7 +5,6 @@ import {
   updateProfile,
   changePassword,
   deleteUser,
-  logout
 } from '../controllers/userController.js';
 import auth from '../middleware/auth.js';
 import { authorizeRoles } from '../middleware/authorize.js';
@@ -26,8 +25,5 @@ router.put('/password', auth, changePassword);
 
 // Admin: Delete user by ID
 router.delete('/:id', auth, authorizeRoles('admin', 'superadmin'), deleteUser);
-
-// Private: Logout
-router.post('/logout', auth, logout);
 
 export default router;
